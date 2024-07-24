@@ -1,0 +1,64 @@
+{
+  "match": {
+    "jsonpath": "$.telemetry_data.encoding_path",
+    "value": "Cisco-IOS-XR-invmgr-oper:inventory/entities/entity/attributes/inv-basic-bag"
+  },
+  "transform": [
+    {
+      "operation": "shift",
+      "spec": {
+        "*": "&",
+        "telemetry_data": {
+          "*": "telemetry_data.&",
+          "data_json": {
+            "*": {
+              "*": "telemetry_data.data_json.[&1].&",
+              "keys": {
+                "*": {
+                  "*": "telemetry_data.data_json.[&3].&"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "operation": "shift",
+      "spec": {
+        "telemetry_data": {
+          "data_json": {
+            "*": {
+              "content": {
+                "@(4,event_type)": "a[&2].event_type",
+                "@(4,seq)": "a[&2].seq",
+                "@(4,telemetry_node)": "a[&2].telemetry_node",
+                "@(4,telemetry_port)": "a[&2].telemetry_port",
+                "@(4,writer_id)": "a[&2].writer_id",
+                "@(4,serialization)": "a[&2].serialization",
+                "@(3,node_id_str)": "a[&2].node_id_str",
+                "@(3,subscription_id_str)": "a[&2].subscription_id_str",
+                "@(3,encoding_path)": "a[&2].encoding_path",
+                "@(3,collection_id)": "a[&2].collection_id",
+                "@(3,collection_start_time)": "a[&2].collection_start_time",
+                "@(3,msg_timestamp)": "a[&2].msg_timestamp",
+                "@(3,collection_end_time)": "a[&2].collection_end_time",
+                "@(1,timestamp)": "a[&2].extracted_timestamp",
+                "@(1,keys_name)": "a[&2].keys_name",
+                "*": "a[&2].&"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "operation": "shift",
+      "spec": {
+        "*": {
+          "*": "[]"
+        }
+      }
+    }
+  ]
+}
