@@ -5,6 +5,7 @@
   "telemetry_node": "fcba:be00:10::1",
   "node_id": "ipt-zbl344-a-aet-41",
   "node_id_str": "ipt-zbl344-a-aet-41",
+  "encoding_path":"openconfig-interfaces:interfaces",
   "timestamp": "2022-08-15 09:32:00.000000",
   "msg_timestamp": "1660555778420",
   "writer_id": "daisy64sttcpjsonipv6-left01c 20220811-0 (854a7e82)",

@@ -3,6 +3,7 @@
   "subscription_id_str":"DAISY-SUBSCRIPTION",
   "node_id": "ipt-zbl344-a-aet-41",
   "node_id_str": "ipt-zbl344-a-aet-41",
+  "encoding_path":"openconfig-interfaces:interfaces",
   "platform_id": "ngBAC",
   "timestamp": "2022-08-15 11:29:37.423286",
   "msg_timestamp": "1660555777420",
