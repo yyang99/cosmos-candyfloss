@@ -7,25 +7,6 @@
     {
       "operation": "shift",
       "spec": {
-        "*": "&",
-        "telemetry_data": {
-          "*": "telemetry_data.&",
-          "data_json": {
-            "*": {
-              "*": "telemetry_data.data_json.[&1].&",
-              "keys": {
-                "*": {
-                  "*": "telemetry_data.data_json.[&3].&"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    {
-      "operation": "shift",
-      "spec": {
         "telemetry_data": {
           "data_json": {
             "*": {
@@ -44,7 +25,6 @@
                 "@(3,msg_timestamp)": "a[&2].msg_timestamp",
                 "@(3,collection_end_time)": "a[&2].collection_end_time",
                 "@(1,timestamp)": "a[&2].extracted_timestamp",
-                "@(1,keys_name)": "a[&2].keys_name",
                 "*": "a[&2].&"
               }
             }
