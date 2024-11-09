@@ -81,7 +81,9 @@ abstract class AbstractDeploymentTest {
       throws JSONException, JsonProcessingException {
     List<KeyValue<String, String>> returned =
         topic == null ? List.of() : topic.readKeyValuesToList();
-    returned.stream().map(x -> x.value).forEach(y -> logger.info("Produced message: {}", y));
+    returned.stream()
+        .map(x -> x.value)
+        .forEach(y -> logger.info("Produced message on topic {}: {}", topic, y));
     if (expectedOutput.isPresent()) {
       var expected = expectedOutput.get();
       assertEquals(
@@ -174,12 +176,16 @@ abstract class AbstractDeploymentTest {
                 .toFormatter();
         var time = LocalDateTime.parse(dateTimeString, formatter);
         zoned = time.atZone(ZoneId.of(ZoneId.SHORT_IDS.get("ECT")));
-      } else {
+      } else if (dateTimeString.contains(".")) {
         var split = dateTimeString.split("\\.");
         var instance =
             Instant.ofEpochSecond(
                 Long.parseUnsignedLong(split[0]), Long.parseUnsignedLong(split[1]));
         zoned = instance.atZone(ZoneId.of(ZoneId.SHORT_IDS.get("ECT")));
+      } else {
+        zoned =
+            Instant.ofEpochMilli(Long.parseUnsignedLong(dateTimeString))
+                .atZone(ZoneId.of(ZoneId.SHORT_IDS.get("ECT")));
       }
     } else {
       zoned = ZonedDateTime.now();
@@ -188,8 +194,28 @@ abstract class AbstractDeploymentTest {
     inputTopic.pipeInput(testKey, input, zoned.toInstant());
 
     checkOutput(outputTopic, expectedOutput);
+    checkOtherOutput(inputResourcePath, outputTopic);
     checkOutput(discardTopic, expectedDiscard);
     checkOutput(dlqTopic, expectedDlq);
+  }
+
+  private void checkOtherOutput(
+      Path inputPath, TestOutputTopic<String, String> currentOutputTopic) {
+    outputTopics.values().stream()
+        .filter(t -> t != currentOutputTopic)
+        .toList()
+        .forEach(
+            topic -> {
+              var recordList = topic.readRecordsToList();
+              if (!recordList.isEmpty()) {
+                logger.warn(
+                    "Other config's topic "
+                        + topic
+                        + " also has output from input file: "
+                        + inputPath.subpath(inputPath.getNameCount() - 3, inputPath.getNameCount())
+                        + ". Please check if it's expected.");
+              }
+            });
   }
 
   /*** Run the tests in testFixturesPath (aka a single folder in the test folder). */
