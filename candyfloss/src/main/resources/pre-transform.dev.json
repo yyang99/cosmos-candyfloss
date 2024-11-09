@@ -25,6 +25,16 @@
           "@(2,serialization)": "serialization",
           "@(2,writer_id)": "writer_id"
         }
+      },
+      "header": {
+        "type": {
+          "telemetry": {
+            "@(3,timestamp)": "timestamp",
+            "@(3,header)": "header",
+            "@(3,payload)": "payload",
+            "@(3,additional-info)": "additional-info"
+          }
+        }
       }
     }
   },
